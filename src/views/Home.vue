@@ -4,12 +4,19 @@
 
     <h1>Hola Mundo</h1>
 
-    <button class="btn btn-primary">Primary</button>
-    <button class="btn btn-secondary">Secondary</button>
-    <button class="btn btn-success">Success</button>
+    <button @click="goToDayboook" class="btn btn-primary">Primary</button>
+    <button @click="goToDayboook" class="btn btn-secondary">Secondary</button>
+    <button @click="goToDayboook" class="btn btn-success">Success</button>
 
   </div>
 </template>
 
 <script>
+export default {
+  methods: {
+    goToDayboook(){
+      this.$router.push({name: "no-entry"})
+    }
+  }
+}
 </script>
