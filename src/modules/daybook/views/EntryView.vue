@@ -25,7 +25,7 @@
         <textarea placeholder="¿Qué sucedió hoy?"></textarea>
     </div>
 
-    <Fab />
+    <Fab icon="fa-save" />
 
     <img src="https://i.blogs.es/6f44dd/google-2015-1/450_1000.jpg" 
         alt="entry-picture"
@@ -46,7 +46,7 @@ export default {
 
 textarea {
     font-size: 20px;
-    border: nnone;
+    border: none;
     height: 100%;
 
     &:focus {
