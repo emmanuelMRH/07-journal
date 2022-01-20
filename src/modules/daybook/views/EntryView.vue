@@ -1,44 +1,90 @@
 <template>
-    <h1>hola Mundo</h1>
-    <div class="entry-title d-flex justify-content-between p-2">
-        <div>
-            <span class="text-success fs-3 fw-bold">15</span>
-            <span class="mx-1 fs-3">Julio</span>
-            <span class="mx-2 fs-4 fw-light">2021, jueves</span>
+
+    <template v-if="entry">
+        <div class="entry-title d-flex justify-content-between p-2">
+            <div>
+                <span class="text-success fs-3 fw-bold">{{day}}</span>
+                <span class="mx-1 fs-3">{{month}}</span>
+                <span class="mx-2 fs-4 fw-light">{{yearDay}}</span>
+            </div>
+
+            <div>
+                <button class="btn btn-danger mx-2">
+                    Borrar
+                    <i class="fa fa-trash-alt"></i>
+                </button>
+
+                <button class="btn btn-primary">
+                    Subir foto
+                    <i class="fa fa-upload"></i>
+                </button>
+            </div>
         </div>
 
-        <div>
-            <button class="btn btn-danger mx-2">
-                Borrar
-                <i class="fa fa-trash-alt"></i>
-            </button>
-
-            <button class="btn btn-primary">
-                Subir foto
-                <i class="fa fa-upload"></i>
-            </button>
+        <hr>
+        <div class="d-flex flex-column px-3 h-7">
+            <textarea v-model="entry.text" placeholder="¿Qué sucedió hoy?"></textarea>
         </div>
-    </div>
 
-    <hr>
-    <div class="d-flex flex-column px-3 h-7">
-        <textarea placeholder="¿Qué sucedió hoy?"></textarea>
-    </div>
+    
+        <img src="https://i.blogs.es/6f44dd/google-2015-1/450_1000.jpg" 
+            alt="entry-picture"
+            class="img-thumbnail"
+        >
+    </template>
 
     <Fab icon="fa-save" />
-
-    <img src="https://i.blogs.es/6f44dd/google-2015-1/450_1000.jpg" 
-        alt="entry-picture"
-        class="img-thumbnail"
-    >
 </template>
 
 <script>
 import { defineAsyncComponent } from 'vue'
+import { mapGetters } from "vuex";
+
+import getDayMonthYear from "../helpers/getDayMonthYear";
+
 export default {
+
+    props:{
+        id: {
+            type: String,
+            required: true
+        }
+    },
+
     components: {
         Fab: defineAsyncComponent(() => import("../components/Fab.vue"))
+    },
+
+    computed: {
+        ...mapGetters('journal', ['getEntryById']),
+        entry(){
+            return this.getEntryById(this.id)
+        },
+        day(){
+            if(!this.entry) return ""
+            return getDayMonthYear(this.entry.id).day
+        },
+        month(){
+            if(!this.entry) return ""
+            return getDayMonthYear(this.entry.id).month
+        },
+        yearDay(){
+            if(!this.entry) return ""
+            return getDayMonthYear(this.entry.id).yearDay
+        }
+        
+    },
+
+    created() {
+        if(!this.entry) return this.$router.push({name: 'no-entry'})
+    },
+
+    watch: {
+        id() {
+            if(!this.entry) return this.$router.push({name: 'no-entry'})
+        }
     }
+    
 }
 </script>
 
