@@ -33,7 +33,7 @@
         >
     </template>
 
-    <Fab icon="fa-save" />
+    <Fab icon="fa-save" @on:click="saveEntry" />
 </template>
 
 <script>
@@ -62,17 +62,23 @@ export default {
         },
         day(){
             if(!this.entry) return ""
-            return getDayMonthYear(this.entry.id).day
+            return getDayMonthYear(this.entry.date).day
         },
         month(){
             if(!this.entry) return ""
-            return getDayMonthYear(this.entry.id).month
+            return getDayMonthYear(this.entry.date).month
         },
         yearDay(){
             if(!this.entry) return ""
-            return getDayMonthYear(this.entry.id).yearDay
+            return getDayMonthYear(this.entry.date).yearDay
         }
         
+    },
+
+    methods: {
+        async saveEntry(){
+            console.log( "SaveEntry" )
+        }
     },
 
     created() {
