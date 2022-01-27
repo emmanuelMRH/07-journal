@@ -7,7 +7,11 @@ import journalApi from "@/api/journalApi";
 
 export const loadEntries = async ({ commit }) => {
     const { data } = await journalApi.get('entries.json')
-    console.log( data )
+    
+    if( !data ){
+        commit('setEntries', [])
+        return
+    }
 
     const entries = []
 
