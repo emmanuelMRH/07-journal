@@ -9,7 +9,9 @@
             </div>
 
             <div>
-                <button class="btn btn-danger mx-2">
+                <button class="btn btn-danger mx-2"
+                    v-if="entry.id"
+                    @click="onDeleteEntry">
                     Borrar
                     <i class="fa fa-trash-alt"></i>
                 </button>
@@ -38,7 +40,7 @@
 
 <script>
 import { defineAsyncComponent } from 'vue'
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 import getDayMonthYear from "../helpers/getDayMonthYear";
 
@@ -58,6 +60,12 @@ export default {
     computed: {
         ...mapGetters('journal', ['getEntryById']),
         entry(){
+            if(this.id === 'new'){
+                return {
+                    text: '',
+                    date: new Date().getTime()
+                }
+            }
             return this.getEntryById(this.id)
         },
         day(){
@@ -77,8 +85,19 @@ export default {
 
     methods: {
         async saveEntry(){
-            console.log( "SaveEntry" )
-        }
+            if( this.entry.id ){
+                this.updateEntry(this.entry)
+            }
+            else{
+                const id = await this.createEntry(this.entry)
+                this.$router.push({name: 'entry', params: {id}})
+            }
+        },
+        async onDeleteEntry(){
+            await this.deleteEntry(this.entry.id)
+            this.$router.push({name: 'no-entry'})
+        },
+        ...mapActions('journal', ['updateEntry', 'createEntry', 'deleteEntry'])
     },
 
     created() {
@@ -99,7 +118,7 @@ export default {
 textarea {
     font-size: 20px;
     border: none;
-    height: 100%;
+    height: 80vh;
 
     &:focus {
         outline: none;
